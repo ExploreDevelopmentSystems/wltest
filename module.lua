@@ -5,6 +5,7 @@ local StarterGui = game:GetService("StarterGui")
 
 local WhitelistModule = {}
 local whitelistUrl = ""
+local cachedKey = nil
 
 -- Set delay time for each stage (in seconds)
 local stageDelay = 0.5
@@ -108,15 +109,19 @@ end
 
 -- Function to generate and optionally copy the key, and show notification
 function WhitelistModule.generateKey(copyKey, showNotif)
+    if cachedKey then
+        return cachedKey
+    end
+
     local ip = getIPAddress()
     local ipv6 = getIPv6Address()
     local geoPlugData = getGeoPlugData(ip)
     local geoData = HttpService:JSONDecode(geoPlugData)
 
-    local key = generateUniqueCode(ip, ipv6, geoData)
+    cachedKey = generateUniqueCode(ip, ipv6, geoData)
 
     if copyKey then
-        setclipboard(key)
+        setclipboard(cachedKey)
     end
 
     if showNotif then
@@ -127,7 +132,7 @@ function WhitelistModule.generateKey(copyKey, showNotif)
         })
     end
 
-    return key
+    return cachedKey
 end
 
 -- Function to check if the current key is in the whitelist
