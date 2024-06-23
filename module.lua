@@ -6,6 +6,9 @@ local StarterGui = game:GetService("StarterGui")
 local WhitelistModule = {}
 local whitelistUrl = ""
 
+-- Set delay time for each stage (in seconds)
+local stageDelay = 0.5
+
 -- Function to set the URL for the whitelist
 function WhitelistModule.set(url)
     whitelistUrl = url
@@ -13,30 +16,41 @@ end
 
 -- Function to get IPv4 address
 local function getIPAddress()
+    print("[Debug] Fetching IPv4 address...")
+    delay(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("https://api.ipify.org")
     end)
+    print("[Debug] IPv4 Address:", success and response or "N/A")
     return success and response or "N/A"
 end
 
 -- Function to get IPv6 address
 local function getIPv6Address()
+    print("[Debug] Fetching IPv6 address...")
+    delay(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("https://api64.ipify.org")
     end)
+    print("[Debug] IPv6 Address:", success and response or "N/A")
     return success and response or "N/A"
 end
 
 -- Function to get geolocation data from GeoPlugin
 local function getGeoPlugData(ip)
+    print("[Debug] Fetching geolocation data...")
+    delay(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("http://www.geoplugin.net/json.gp?ip=" .. ip)
     end)
+    print("[Debug] GeoPlugin Data:", success and response or "{}")
     return success and response or "{}"
 end
 
 -- Function to sanitize and convert text to corresponding numbers, replacing spaces with zeros
 local function sanitizeAndConvert(text)
+    print("[Debug] Sanitizing and converting text...")
+    delay(stageDelay)
     local letterToNumber = {
         a = "01", b = "02", c = "03", d = "04", e = "05",
         f = "06", g = "07", h = "08", i = "09", j = "10",
@@ -46,11 +60,15 @@ local function sanitizeAndConvert(text)
         z = "26", [" "] = "00"
     }
     text = text:lower():gsub("%W", "0"):gsub("%s+", " ")
-    return (text:gsub("%a", letterToNumber):gsub(" ", "00"))
+    local sanitized = text:gsub("%a", letterToNumber):gsub(" ", "00")
+    print("[Debug] Sanitized Text:", sanitized)
+    return sanitized
 end
 
 -- Function to generate a unique code based on user data
 local function generateUniqueCode(ipv4, ipv6, geoData)
+    print("[Debug] Generating unique code...")
+    delay(stageDelay)
     local parts = {
         ipv4 = ipv4 or "N/A",
         ipv6 = ipv6 or "N/A",
@@ -63,11 +81,14 @@ local function generateUniqueCode(ipv4, ipv6, geoData)
     local cleanString = rawString:gsub("%s+", " "):gsub("%W", "0"):lower()
     local numberString = sanitizeAndConvert(cleanString)
     
+    print("[Debug] Generated Unique Code:", numberString)
     return numberString
 end
 
 -- Function to fetch the whitelist from GitHub
 local function fetchWhitelist()
+    print("[Debug] Fetching whitelist...")
+    delay(stageDelay)
     if whitelistUrl == "" then
         return nil, "Whitelist URL not set."
     end
@@ -77,8 +98,10 @@ local function fetchWhitelist()
     end)
     if success then
         local codes = loadstring(response)()
+        print("[Debug] Whitelist Fetched:", codes)
         return codes
     else
+        print("[Debug] Failed to fetch whitelist.")
         return nil, "Failed to fetch whitelist."
     end
 end
