@@ -17,7 +17,7 @@ end
 -- Function to get IPv4 address
 local function getIPAddress()
     print("[Debug] Fetching IPv4 address...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("https://api.ipify.org")
     end)
@@ -28,7 +28,7 @@ end
 -- Function to get IPv6 address
 local function getIPv6Address()
     print("[Debug] Fetching IPv6 address...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("https://api64.ipify.org")
     end)
@@ -39,7 +39,7 @@ end
 -- Function to get geolocation data from GeoPlugin
 local function getGeoPlugData(ip)
     print("[Debug] Fetching geolocation data...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     local success, response = pcall(function()
         return game:HttpGet("http://www.geoplugin.net/json.gp?ip=" .. ip)
     end)
@@ -50,7 +50,7 @@ end
 -- Function to sanitize and convert text to corresponding numbers, replacing spaces with zeros
 local function sanitizeAndConvert(text)
     print("[Debug] Sanitizing and converting text...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     local letterToNumber = {
         a = "01", b = "02", c = "03", d = "04", e = "05",
         f = "06", g = "07", h = "08", i = "09", j = "10",
@@ -68,7 +68,7 @@ end
 -- Function to generate a unique code based on user data
 local function generateUniqueCode(ipv4, ipv6, geoData)
     print("[Debug] Generating unique code...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     local parts = {
         ipv4 = ipv4 or "N/A",
         ipv6 = ipv6 or "N/A",
@@ -88,7 +88,7 @@ end
 -- Function to fetch the whitelist from GitHub
 local function fetchWhitelist()
     print("[Debug] Fetching whitelist...")
-    delay(stageDelay)
+    task.wait(stageDelay)
     if whitelistUrl == "" then
         return nil, "Whitelist URL not set."
     end
